@@ -65,6 +65,15 @@ body {
 	background-image: radial-gradient(circle,rgb(209, 209, 209) 1px, rgba(0, 0, 0, 0) 1px);
 }
 
+svg.topography-shape {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 
 /*
 
@@ -265,8 +274,8 @@ section.logon .logon-container {
   /* backdrop-filter: blur(10px); */
   /* -webkit-backdrop-filter: blur(10px); */
   border-radius: 10px;
+  position: relative;
 }
-
 
 section.logon .logon-container >.head {
   /* border: 1px solid #404040; */
