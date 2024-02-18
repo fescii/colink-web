@@ -250,7 +250,8 @@ section.logon {
 }
 
 section.logon .logon-container {
-  background-color: var(--background);
+  /* background-color: var(--background); */
+  background: #ffffffec;
   z-index: 3;
   padding: 20px;
   width: 700px;
@@ -261,11 +262,9 @@ section.logon .logon-container {
   justify-content: center;
   gap: 20px;
   box-shadow: 1px 1px 30px 0px rgba(0, 0, 0, 0.062);
+  /* backdrop-filter: blur(10px); */
+  /* -webkit-backdrop-filter: blur(10px); */
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
 }
 
 
