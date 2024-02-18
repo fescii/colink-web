@@ -351,13 +351,34 @@ section.logon .logon-container >.fields .field .input-group {
   justify-content: center;
   align-items: start;
   color: #404040;
-  gap: 0;
+  gap: 5px;
+  position: relative;
+  transition: border-color 0.3s ease-in-out;
 }
 
 section.logon .logon-container >.fields label {
   /* border: 1px solid black; */
-  padding: 0 0 5px 5px;
+  padding: 0 0 5px 0;
   color: #404040;
+}
+
+section.logon .logon-container >.fields label {
+  color: #666666;
+  font-size: 1.1rem;
+  font-family: var(--font-alt);
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  transition: all 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+section.logon .logon-container >.fields label.focused {
+  top: -10px;
+  font-size: 0.9rem;
+  /* background-color: #ffffff; */
+  background-color: #eaf3ff;
+  padding: 0 5px;
 }
 
 section.logon .logon-container >.fields .field span.error {
