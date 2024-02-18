@@ -332,23 +332,26 @@ section.logon .logon-container>.welcome > p {
 }
 
 section.logon .logon-container >.welcome > a {
-  /* background: linear-gradient(103.53deg, #18A565 -6.72%, #21D029 109.77%); */
-  background: linear-gradient(0deg,
-      #18A565 0%,
-      #21D029 100%);
-	background-color: rgb(247, 145, 162);
+  /*background: linear-gradient(103.53deg, #18A565 -6.72%, #21D029 109.77%);
+  */
+  background: linear-gradient(0deg,      #18A565 0%,      #21D029 100%);
+  background-color: rgb(247, 145, 162);
   text-decoration: none;
   padding: 10px 20px;
   cursor: pointer;
   margin: 20px 0%;
-  width: max-content;
+  width: 150px;
   justify-self: center;
+  text-align: center;
   color: #ffffff;
   border: none;
   font-size: 1.15rem;
   font-weight: 500;
   border-radius: 50px;
   -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
 }
 
 section.logon .logon-container > .welcome > a:last-of-type {
@@ -530,7 +533,7 @@ section.logon .logon-container >.footer {
   border-top: 1px solid #80808027;
   margin: 0;
   width: 100%;
-  padding: 20px 0 10px 0;
+  padding: 10px 0 10px 0;
   display: flex;
   flex-flow: row;
   justify-content: center;
