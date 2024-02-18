@@ -403,7 +403,8 @@ section.logon .logon-container >.welcome > .info {
 section.logon .logon-container > .welcome > .info svg {
   margin: 0 0 -3px 0;
   color: #18A565;
-  width: 24px;
+  width: 18px;
+  height: 18px;
 }
 
 /* section.logon .logon-container>.welcome>.info svg path {
