@@ -224,9 +224,9 @@ Typography End
 
 .circles li:nth-child(10) {
   left: 85%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 0s;
+  width: 100px;
+  height: 100px;
+  animation-delay: 1s;
   animation-duration: 11s;
 }
 
