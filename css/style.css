@@ -1,0 +1,318 @@
+/*
+
+Copyright: 2024 - Aduki Incorporation & Darkchesa Comics
+Name: Ruki Player
+URL: https://github.com/aduki-Inc/ruki.git
+Author: Fredrick Femar Ochieng
+Author URL: https://femar.co.ke
+
+
+/* Fonts
+==================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sen:wght@400;500;600;700;800&display=swap');
+
+/* Normalize
+==================================== */
+:root {
+  --font-main: 'Plus Jakarta Sans';
+  --background: #ffffff;
+}
+
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: var(--font-main), sans-serif;
+}
+
+*:focus {
+  outline: inherit !important;
+}
+
+*::-webkit-scrollbar {
+  width: 3px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #DDDDD7;
+}
+
+*::-webkit-scrollbar-thumb {
+  width: 3px;
+  background: linear-gradient(#53595f, #627ea0);
+  border-radius: 50px;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  /* border: 3px solid red; */
+  background-position: 100%;
+	background-size: cover;
+	background-size: 1rem 1rem;
+	background-color: #f3f4f9;
+	background-image: radial-gradient(circle,rgb(209, 209, 209) 1px, rgba(0, 0, 0, 0) 1px);
+}
+
+
+/*
+
+Typography
+==========
+
+*/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-main), sans-serif;
+}
+
+ul, ol {
+  padding: 0;
+  margin: 0;
+}
+
+ul li, ol li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/*
+
+Typography End
+==============
+
+*/
+
+
+
+/*
+
+  SECTION - LOGON
+
+*/
+
+section.logon {
+  /* border: 2px solid blue; */
+  width: 100%;
+  min-height: calc(100vh - 5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+section.logon .logon-container{
+  /*border: 2px solid blue;
+  */background-color: var(--background);
+  padding: 20px;
+  width: 700px;
+  height: max-content;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 8px 8px 30px 0px rgba(42, 67, 113, 0.158);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+section#content>.container>.fields {
+  margin: 0 0 20px 0;
+  width: 90%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: start;
+  gap: 20px;
+}
+
+section#content>.container>.fields>.field {
+  /*border: 1px solid black;*/
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: start;
+  gap: 2px;
+}
+
+section#content>.container>.fields .field.location,
+section#content>.container>.fields .field.contact,
+section#content>.container>.fields .field.name {
+  /* border: 1px solid black; */
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: start;
+  gap: 20px;
+}
+
+section#content>.container>.fields .field .input-group {
+  /* border: 1px solid black; */
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: start;
+  color: #404040;
+  gap: 0;
+}
+
+section#content>.container>.fields label {
+  /* border: 1px solid black; */
+  padding: 0 0 5px 5px;
+  color: #404040;
+}
+
+section#content>.container>.fields .field span.error {
+  color: #ee7752;
+  font-size: 0.8rem;
+  display: none;
+}
+
+section#content>.container>.fields .field span.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+
+section#content>.container>.fields .field span.wrapper>span {
+  border: 1px solid #80808037;
+  border-right: none;
+  font-size: 1rem;
+  width: 60px;
+  height: 40px;
+  padding: 10px 12px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  color: #08b86f;
+  display: flex;
+  align-items: center;
+}
+
+section#content>.container>.fields .field span.wrapper>input {
+  border: 1px solid #80808037;
+  font-size: 1rem;
+  width: calc(100% - 60px);
+  outline: none;
+  height: 40px;
+  padding: 10px 12px;
+  border-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  color: #404040;
+}
+
+section#content>.container>.fields .field span.wrapper>input:focus {
+  border: 1px solid #08b86f60;
+}
+
+section#content>.container>.fields .field input {
+  border: 1px solid #80808037;
+  font-size: 1rem;
+  width: 100%;
+  height: 40px;
+  outline: none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #404040;
+}
+
+section#content>.container>.fields .field input:focus {
+  border: 1px solid #08b86f60;
+}
+
+section#content>.container>.fields .field select {
+  font-size: 1rem;
+  width: 100%;
+  height: 40px;
+  outline: none;
+  padding: 10px 12px;
+  border: 1px solid #80808017;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #fefefe;
+  color: #404040;
+  border-radius: 12px;
+}
+
+section#content>.footer {
+  border-top: 1px solid #80808027;
+  margin: 0;
+  width: 90%;
+  padding: 20px 0 10px 0;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  /* justify-content: center;  */
+  justify-self: end;
+}
+
+section#content>.footer>.action {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 50px;
+  font-family: var(--font-alt);
+  line-height: 1.2;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #404040;
+  cursor: pointer;
+}
+
+section#content>.footer>.action.prev {
+  padding: 10px 20px 10px 15px;
+  background: rgba(57, 56, 56, 0.087);
+  background: linear-gradient(0deg, rgba(57, 56, 56, 0.087) 0%, rgba(57, 56, 56, 0.187) 100%);
+}
+
+section#content>.footer>.action.prev svg path {
+  fill: #404040;
+}
+
+section#content>.footer>.action.next {
+  padding: 10px 15px 10px 20px;
+  color: #ffffff;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgba(20, 167, 62, 1) 0%, rgba(102, 247, 113, 1) 100%);
+  background-color: rgb(247, 145, 162);
+}
+
+section#content>.footer>.action.next svg path {
+  fill: #ffffff;
+}
+
+section#content>.footer>.action.disabled {
+  background: #80808023;
+  pointer-events: none;
+  opacity: .9;
+}
