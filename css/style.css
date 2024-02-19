@@ -446,8 +446,14 @@ section.logon .logon-container >.fields {
   gap: 20px;
 }
 
+section.logon .logon-container>.fields.center {
+  /* border: 1px solid black; */
+  align-items: center;
+  /* width: max-content; */
+}
+
 section.logon .logon-container >.fields>.field {
-  /*border: 1px solid black;*/
+  border: 1px solid black;
   width: 100%;
   display: flex;
   flex-flow: column;
@@ -456,20 +462,13 @@ section.logon .logon-container >.fields>.field {
   gap: 2px;
 }
 
-section.logon .logon-container >.fields .field.location,
-section.logon .logon-container >.fields .field.contact,
-section.logon .logon-container >.fields .field.name {
-  /* border: 1px solid black; */
-  width: 100%;
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  align-items: start;
-  gap: 20px;
+section.logon .logon-container >.fields.center>.field {
+  align-items: center;
 }
 
+
 section.logon .logon-container >.fields .field .input-group {
-  /* border: 1px solid black; */
+  border: 1px solid black;
   width: 100%;
   display: flex;
   flex-flow: column;
@@ -481,6 +480,10 @@ section.logon .logon-container >.fields .field .input-group {
   transition: border-color 0.3s ease-in-out;
 }
 
+section.logon .logon-container >.fields.center .field .input-group {
+  align-items: center;
+}
+
 section.logon .logon-container >.fields label {
   /* border: 1px solid black; */
   padding: 0 0 5px 0;
@@ -490,12 +493,28 @@ section.logon .logon-container >.fields label {
 section.logon .logon-container >.fields label {
   color: #666666;
   font-size: 1.1rem;
-  font-family: var(--font-alt);
-  position: absolute;
-  top: 10px;
-  left: 15px;
+  font-family: var(--font-main);
   transition: all 0.3s ease-in-out;
   pointer-events: none;
+}
+
+section.logon .logon-container >.fields .field input {
+  border: 1px solid #80808037;
+  font-size: 1rem;
+  width: 100%;
+  height: 40px;
+  outline: none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #404040;
+}
+
+section.logon .logon-container >.fields.center .field input {
+  width: 80%;
+}
+
+section.logon .logon-container >.fields .field input:focus {
+  border: 1px solid #08b86f60;
 }
 
 section.logon .logon-container >.fields label.focused {
@@ -550,20 +569,6 @@ section.logon .logon-container >.fields .field span.wrapper>input:focus {
   border: 1px solid #08b86f60;
 }
 
-section.logon .logon-container >.fields .field input {
-  border: 1px solid #80808037;
-  font-size: 1rem;
-  width: 100%;
-  height: 40px;
-  outline: none;
-  padding: 10px 12px;
-  border-radius: 12px;
-  color: #404040;
-}
-
-section.logon .logon-container >.fields .field input:focus {
-  border: 1px solid #08b86f60;
-}
 
 section.logon .logon-container >.fields .field select {
   font-size: 1rem;
@@ -579,6 +584,8 @@ section.logon .logon-container >.fields .field select {
   border-radius: 12px;
 }
 
+
+/* Logon Footer */
 section.logon .logon-container >.footer {
   border-top: 1px solid #80808027;
   margin: 0;
