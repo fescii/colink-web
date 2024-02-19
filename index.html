@@ -103,16 +103,15 @@
 					<span class="slogan">Create and contribute to ideas that can change the world.</span>
 				</div>
 			</div>
-			<div class="stages login">
+			<div class="stages register">
 				<span class="no active first">1</span>
 				<span class="no second active">2</span>
 				<span class="no third">3</span>
 				<span class="no fourth">4</span>
-				<svg class="done active" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill"
-					viewBox="0 0 16 16">
-					<path
-						d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-				</svg>
+				<span class="done">
+					<span class="left"></span>
+					<span class="right"></span>
+				</span>
 			</div>
 			<!-- <div class="welcome">
 				<p>
@@ -131,8 +130,8 @@
 						Policy</a>.
 				</div>
 			</div> -->
-			<form class="fields center success">
-				<div class="field name">
+			<form class="fields inital bio">
+				<!-- <div class="field username">
 					<div class="input-group">
 						<label for="username" class="center">Choose your username</label>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill"
@@ -140,22 +139,51 @@
 							<path
 								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
 						</svg>
-						<!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill"
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill"
 							viewBox="0 0 16 16">
 							<path
 								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
-						</svg> -->
+						</svg>
 						<input data-name="username" type="text" name="username" id="username" placeholder="Enter your desired username" required>
 						<span class="status">Username is taken!</span>
 					</div>
-					<div class="actions">
-						<button type="button" class="action prev">
-							<span class="text">Back</span>
-						</button>
-						<button type="submit" class="action next">
-							<span class="text">Continue</span>
-						</button>
+				</div> -->
+				<div class="field bio">
+					<div class="input-group firstname">
+						<label for="firstname" class="center">First name</label>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+							<path
+								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+						</svg>
+						<input data-name="firstname" type="text" name="firstname" id="firstname" placeholder="Enter your first name" required>
+						<span class="status">First name is required</span>
 					</div>
+					<div class="input-group lastname">
+						<label for="lastname" class="center">Last name</label>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+							<path
+								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+						</svg>
+						<input data-name="lastname" type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
+						<span class="status">Last name is required</span>
+					</div>
+					<div class="input-group email">
+						<label for="email" class="center">Email</label>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+							<path
+								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+						</svg>
+						<input data-name="email" type="email" name="email" id="email" placeholder="Enter your email" required>
+						<span class="status">Email is required</span>
+					</div>
+				</div>
+				<div class="actions">
+					<button type="button" class="action prev">
+						<span class="text">Back</span>
+					</button>
+					<button type="submit" class="action next">
+						<span class="text">Continue</span>
+					</button>
 				</div>
 			</form>
 			<ul class="footer">
