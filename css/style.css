@@ -134,7 +134,7 @@ Typography End
   list-style: none;
   width: 45px;
   height: 45px;
-  background: rgba(255, 255, 255, 0.2);
+  /* background: rgba(255, 255, 255, 0.2); */
   animation: animate 25s linear infinite;
   bottom: -150px;
   display: flex;
@@ -290,7 +290,7 @@ section.logon .logon-container {
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 10px;
   box-shadow: 1px 1px 30px 0px rgba(0, 0, 0, 0.062);
   /* backdrop-filter: blur(10px); */
   /* -webkit-backdrop-filter: blur(10px); */
@@ -301,7 +301,7 @@ section.logon .logon-container {
 section.logon .logon-container >.head {
   /* border: 1px solid #404040; */
   background-color: transparent;
-  margin: 0 0 25px 5px;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -342,6 +342,65 @@ section.logon .logon-container >.head>.logo span.slogan {
   font-size: 1rem;
   font-style: italic;
   text-align: center;
+}
+
+section.logon .logon-container > .stages {
+  /* border: 1px solid #404040; */
+  background-color: transparent;
+  height: max-content;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 0 0 15px 0;
+}
+
+section.logon .logon-container>.stages span.done {
+  /* border: 1px solid red; */
+  background-color: rgb(57, 56, 56);
+  background: linear-gradient(0deg, rgba(57, 56, 56, 0.1) 0%, rgba(57, 56, 56, 0.3) 100%);
+  width: 30px;
+  height: 30px;
+}
+
+section.logon .logon-container>.stages span.done.active {
+  background: rgb(223, 121, 26);
+  background: linear-gradient(0deg, rgb(223, 121, 26) 0%, rgb(240, 156, 78) 100%);
+  background-color: rgb(247, 145, 162);
+}
+
+section.logon .logon-container > .stages span.no {
+  /* border: 1px solid red; */
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding: 2px;
+  background-color: rgb(57, 56, 56);
+  background: linear-gradient(0deg, rgba(57, 56, 56, 0.1) 0%, rgba(57, 56, 56, 0.3) 100%);
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
+}
+
+section.logon .logon-container > .stages.login span.no.fourth,
+section.logon .logon-container > .stages.login span.no.third {
+  display: none;
+}
+
+section.logon .logon-container > .stages span.no.active {
+  background: linear-gradient(0deg, #18A565 0%, #21D029 100%);
+}
+
+section.logon .logon-container > .stages span.no:nth-of-type(even).active {
+  background: rgb(223, 121, 26);
+  background: linear-gradient(0deg, rgb(223, 121, 26) 0%, rgb(240, 156, 78) 100%);
+  background-color: rgb(247, 145, 162);
 }
 
 section.logon .logon-container > .welcome {
@@ -446,14 +505,12 @@ section.logon .logon-container >.fields {
   gap: 20px;
 }
 
-section.logon .logon-container>.fields.center {
-  /* border: 1px solid black; */
+/* section.logon .logon-container>.fields.center {
   align-items: center;
-  /* width: max-content; */
-}
+} */
 
 section.logon .logon-container >.fields>.field {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   width: 100%;
   display: flex;
   flex-flow: column;
@@ -468,8 +525,8 @@ section.logon .logon-container >.fields.center>.field {
 
 
 section.logon .logon-container >.fields .field .input-group {
-  border: 1px solid black;
-  width: 100%;
+  /* border: 1px solid black; */
+  width: 90%;
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -480,9 +537,29 @@ section.logon .logon-container >.fields .field .input-group {
   transition: border-color 0.3s ease-in-out;
 }
 
-section.logon .logon-container >.fields.center .field .input-group {
-  align-items: center;
+section.logon .logon-container>.fields .field .input-group > svg {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 20px;
+  height: 20px;
 }
+section.logon .logon-container>.fields.success .field .input-group>svg,
+section.logon .logon-container>.fields.failed .field .input-group>svg {
+  bottom: 30px;
+}
+
+section.logon .logon-container>.fields.success .field .input-group > svg {
+  color: #18A565;
+}
+
+section.logon .logon-container>.fields.failed .field .input-group > svg {
+  color: #ec4b19;
+}
+
+/* section.logon .logon-container >.fields.center .field .input-group {
+  align-items: center;
+} */
 
 section.logon .logon-container >.fields label {
   /* border: 1px solid black; */
@@ -509,12 +586,30 @@ section.logon .logon-container >.fields .field input {
   color: #404040;
 }
 
-section.logon .logon-container >.fields.center .field input {
-  width: 80%;
-}
+/* section.logon .logon-container >.fields.center .field input {
+  width: 400px;
+} */
 
 section.logon .logon-container >.fields .field input:focus {
   border: 1px solid #08b86f60;
+}
+
+section.logon .logon-container >.fields.success .field input,
+section.logon .logon-container >.fields.success .field input:focus {
+  border: 1px solid #08b86f60;
+}
+
+section.logon .logon-container >.fields.failed .field input,
+section.logon .logon-container >.fields.failed .field input:focus {
+  border: 1px solid  #ec4a1965;
+}
+
+section.logon .logon-container>.fields.success .field input {
+  color: #18A565;
+}
+
+section.logon .logon-container>.fields.failed .field input {
+  color: #ec4b19;
 }
 
 section.logon .logon-container >.fields label.focused {
@@ -525,10 +620,23 @@ section.logon .logon-container >.fields label.focused {
   padding: 0 5px;
 }
 
-section.logon .logon-container >.fields .field span.error {
-  color: #ee7752;
-  font-size: 0.8rem;
+section.logon .logon-container >.fields .field span.status {
+  color: #ec4b19;
+  font-size: 0.95rem;
   display: none;
+  padding: 0 0 0 5px;
+}
+
+section.logon .logon-container >.fields.failed .field span.status {
+  color: #ec4b19;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+section.logon .logon-container >.fields.success .field span.status {
+  color: #18A565;
+  font-size: 0.8rem;
+  display: inline-block;
 }
 
 section.logon .logon-container >.fields .field span.wrapper {
@@ -569,7 +677,6 @@ section.logon .logon-container >.fields .field span.wrapper>input:focus {
   border: 1px solid #08b86f60;
 }
 
-
 section.logon .logon-container >.fields .field select {
   font-size: 1rem;
   width: 100%;
@@ -582,6 +689,62 @@ section.logon .logon-container >.fields .field select {
   background-color: #fefefe;
   color: #404040;
   border-radius: 12px;
+}
+
+section.logon .logon-container>.fields .actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin: 20px 0 0 0;
+}
+
+section.logon .logon-container>.fields .actions>.action {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: 15px;
+  font-family: var(--font-main);
+  line-height: 1.2;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #404040;
+  width: 120px;
+  padding: 8px 10px;
+  cursor: pointer;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+}
+
+section.logon .logon-container>.fields .actions>.action.prev {
+  background-color: rgb(57, 56, 56);
+  background: linear-gradient(0deg, rgba(57, 56, 56, 0.087) 0%, rgba(57, 56, 56, 0.187) 100%);
+}
+
+section.logon .logon-container>.fields .actions>.action.prev svg path {
+  fill: #404040;
+}
+
+section.logon .logon-container>.fields .actions>.action.next {
+  color: #ffffff;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgba(20, 167, 62, 1) 0%, rgba(102, 247, 113, 1) 100%);
+  background-color: rgb(247, 145, 162);
+}
+
+section.logon .logon-container>.fields .actions>.action.next svg path {
+  fill: #ffffff;
+}
+
+section.logon .logon-container>.fields .actions>.action.disabled {
+  background: #80808023;
+  pointer-events: none;
+  opacity: .9;
 }
 
 
@@ -653,54 +816,6 @@ section.logon .logon-container > .footer > li a.copyright .year {
   font-weight: 500;
 }
 
-
-
-
-
-
-/* To be removed */
-section.logon .logon-container >.footer>.action {
-  display: flex;
-  flex-flow: row;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  border-radius: 50px;
-  font-family: var(--font-alt);
-  line-height: 1.2;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #404040;
-  cursor: pointer;
-}
-
-section.logon .logon-container >.footer>.action.prev {
-  padding: 10px 20px 10px 15px;
-  background: rgba(57, 56, 56, 0.087);
-  background: linear-gradient(0deg, rgba(57, 56, 56, 0.087) 0%, rgba(57, 56, 56, 0.187) 100%);
-}
-
-section.logon .logon-container >.footer>.action.prev svg path {
-  fill: #404040;
-}
-
-section.logon .logon-container >.footer>.action.next {
-  padding: 10px 15px 10px 20px;
-  color: #ffffff;
-  background: #ad5389;
-  background: linear-gradient(0deg, rgba(20, 167, 62, 1) 0%, rgba(102, 247, 113, 1) 100%);
-  background-color: rgb(247, 145, 162);
-}
-
-section.logon .logon-container >.footer>.action.next svg path {
-  fill: #ffffff;
-}
-
-section.logon .logon-container >.footer>.action.disabled {
-  background: #80808023;
-  pointer-events: none;
-  opacity: .9;
-}
 
 
 
