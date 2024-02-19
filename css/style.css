@@ -694,3 +694,42 @@ section.logon .logon-container >.footer>.action.disabled {
   pointer-events: none;
   opacity: .9;
 }
+
+
+
+
+
+#loader-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #ffffff6c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  -webkit-border-radius: inherit;
+  -moz-border-radius: inherit;
+  -ms-border-radius: inherit;
+  -o-border-radius: inherit;
+}
+
+#loader-container > .loader {
+  width: 35px;
+  aspect-ratio: 1;
+  --_g: no-repeat radial-gradient(farthest-side, #18A565 94%, #0000);
+  --_g1: no-repeat radial-gradient(farthest-side, #21D029 94%, #0000);
+  --_g2: no-repeat radial-gradient(farthest-side, #df791a 94%, #0000);
+  --_g3: no-repeat radial-gradient(farthest-side, #f09c4e 94%, #0000);
+  background:    var(--_g) 0 0,    var(--_g1) 100% 0,    var(--_g2) 100% 100%,    var(--_g3) 0 100%;
+  background-size: 35% 35%;
+  animation: l38 .9s infinite;
+  -webkit-animation: l38 .9s infinite;
+}
+@keyframes l38 {
+  100% {
+    background-position: 100% 0, 100% 100%, 0 100%, 0 0
+  }
+}
