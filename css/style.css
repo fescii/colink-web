@@ -280,7 +280,7 @@ section.logon .canvas {
 }
 
 section.logon .logon-container {
-  /* background-color: var(--background); */
+  /* border: 1px solid black; */
   background: #ffffffec;
   z-index: 3;
   padding: 20px;
@@ -534,13 +534,12 @@ section.logon .logon-container >.fields {
   display: flex;
   flex-flow: column;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   gap: 20px;
 }
 
 section.logon .logon-container >.fields .field.bio{
   /* border: 1px solid black; */
-  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -555,7 +554,7 @@ section.logon .logon-container >.fields .field.bio{
 
 section.logon .logon-container >.fields>.field {
   /* border: 1px solid black; */
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -570,7 +569,7 @@ section.logon .logon-container >.fields.center>.field {
 
 section.logon .logon-container >.fields .field .input-group {
   /* border: 1px solid black; */
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -690,6 +689,7 @@ section.logon .logon-container >.fields .field span.status {
   padding: 0 0 0 5px;
 }
 
+section.logon .logon-container>.fields .field .input-group.failed span.status,
 section.logon .logon-container >.fields.failed .field span.status {
   color: #ec4b19;
   font-size: 0.8rem;
