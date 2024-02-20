@@ -660,6 +660,7 @@ section.logon .logon-container >.fields.success .field input:focus {
   border: 1px solid #08b86f60;
 }
 
+section.logon .logon-container >.fields .field  .input-group.failed input,
 section.logon .logon-container >.fields.failed .field input,
 section.logon .logon-container >.fields.failed .field input:focus {
   border: 1px solid  #ec4a1965;
@@ -669,6 +670,7 @@ section.logon .logon-container>.fields.success .field input {
   color: #18A565;
 }
 
+section.logon .logon-container>.fields .field .input-group.failed input,
 section.logon .logon-container>.fields.failed .field input {
   color: #ec4b19;
 }
