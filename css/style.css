@@ -539,12 +539,14 @@ section.logon .logon-container >.fields {
 }
 
 section.logon .logon-container >.fields .field.bio{
-  border: 1px solid black;
+  /* border: 1px solid black; */
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
   justify-content: center;
+  column-gap: 20px;
+  row-gap: 20px;
 }
 
 /* section.logon .logon-container>.fields.center {
@@ -567,7 +569,7 @@ section.logon .logon-container >.fields.center>.field {
 
 
 section.logon .logon-container >.fields .field .input-group {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   width: 90%;
   display: flex;
   flex-flow: column;
@@ -580,7 +582,7 @@ section.logon .logon-container >.fields .field .input-group {
 }
 
 section.logon .logon-container >.fields .field.bio .input-group {
-  width: 90%;
+  width: 100%;
 }
 
 section.logon .logon-container >.fields .field.bio .input-group.email {
