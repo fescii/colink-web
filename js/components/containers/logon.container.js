@@ -57,6 +57,8 @@ export default class LogonContainer extends HTMLElement {
       <div class="logon-container">
         ${this.getHeader()}
         ${this.getStages()}
+        ${this.getWelcome()}
+        ${this.getFooter()}
       </div>
 
       ${this.getStyles()}
@@ -148,9 +150,9 @@ export default class LogonContainer extends HTMLElement {
 
   getStages() {
     return `
-      <div class="stages register">
-				<span class="no active first">1</span>
-				<span class="no second active">2</span>
+      <div class="stages welcome-stages">
+				<span class="no first active">1</span>
+				<span class="no second">2</span>
 				<span class="no third">3</span>
 				<span class="no fourth">4</span>
 				<span class="done">
@@ -544,7 +546,7 @@ export default class LogonContainer extends HTMLElement {
         }
 
         .logon-container > .stages {
-          /* border: 1px solid #404040; */
+          /*border: 1px solid #404040;*/
           background-color: transparent;
           height: max-content;
           width: max-content;
@@ -552,7 +554,7 @@ export default class LogonContainer extends HTMLElement {
           align-items: center;
           justify-content: center;
           gap: 15px;
-          margin: 0 0 15px 0;
+          margin: 10px 0 10px 0;
         }
 
         .logon-container>.stages span.done {
@@ -622,6 +624,16 @@ export default class LogonContainer extends HTMLElement {
 
         .logon-container > .stages.login span.no.fourth,
         .logon-container > .stages.login span.no.third {
+          display: none;
+        }
+
+        .logon-container > .stages.welcome-stages span.no.fourth,
+        .logon-container > .stages.welcome-stages span.no.third {
+          display: none;
+        }
+
+        .logon-container > .stages.register span.no.fourth,
+        .logon-container > .stages.register span.no.third {
           display: none;
         }
 
@@ -963,7 +975,7 @@ export default class LogonContainer extends HTMLElement {
         /* Logon Footer */
         .logon-container >.footer {
           border-top: 1px solid #80808027;
-          margin: 0;
+          margin: 10px 0 0 0;
           width: 100%;
           padding: 10px 0 10px 0;
           display: flex;
@@ -1000,6 +1012,7 @@ export default class LogonContainer extends HTMLElement {
           color: inherit;
           /* font-family: var(--font-mono); */
           line-height: 1.4;
+          text-decoration: none;
           font-size: 0.95rem;
           font-weight: 400;
         }
