@@ -840,6 +840,7 @@ section.logon .logon-container > .footer > li a.copyright .year {
   left: 0;
   bottom: 0;
   right: 0;
+  z-index: 5;
   background-color: #ffffff6c;
   display: flex;
   align-items: center;
@@ -859,9 +860,9 @@ section.logon .logon-container > .footer > li a.copyright .year {
   --_g2: no-repeat radial-gradient(farthest-side, #df791a 94%, #0000);
   --_g3: no-repeat radial-gradient(farthest-side, #f09c4e 94%, #0000);
   background:    var(--_g) 0 0,    var(--_g1) 100% 0,    var(--_g2) 100% 100%,    var(--_g3) 0 100%;
-  background-size: 35% 35%;
-  animation: l38 .9s infinite;
-  -webkit-animation: l38 .9s infinite;
+  background-size: 30% 30%;
+  animation: l38 .9s infinite ease-in-out;
+  -webkit-animation: l38 .9s infinite ease-in-out;
 }
 @keyframes l38 {
   100% {
