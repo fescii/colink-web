@@ -7,6 +7,8 @@ export default class LogonContainer extends HTMLElement {
     // lets create our shadow root
     this.shadowObj = this.attachShadow({ mode: 'open' });
 
+    this._step = 0;
+
     this.render();
   }
 
@@ -17,7 +19,7 @@ export default class LogonContainer extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('We are inside connectedCallback');
+    // console.log('We are inside connectedCallback');
 
     document.addEventListener("DOMContentLoaded", (_) => {
       Particles.init({
@@ -27,10 +29,110 @@ export default class LogonContainer extends HTMLElement {
       });
     })
 
+
+    const contentContainer = this.shadowObj.querySelector('.logon-container');
+    if (contentContainer) {
+      const contentTitle = contentContainer.querySelector('.head > .logo h2 span.action')
+      const stagesContainer = contentContainer.querySelector('.stages');
+      this.activateRegister(contentContainer, stagesContainer, contentTitle);
+    }
+
   }
 
   disconnectedCallback() {
     // console.log('We are inside disconnectedCallback');
+  }
+
+  activateRegister(contentContainer, stagesContainer, contentTitle) {
+    const loader = this.getLoader();
+    const form = this.getRegistrationForm();
+    const outerThis = this;
+    const registerButton = contentContainer.querySelector('.welcome > a.register');
+    if (registerButton) {
+      registerButton.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        contentContainer.insertAdjacentHTML('afterbegin', loader);
+
+        const welcome = contentContainer.querySelector('.welcome');
+
+        setTimeout(() => {
+          welcome.remove();
+          contentTitle.textContent = 'Register';
+          outerThis.changeStages('register', stagesContainer);
+          outerThis.nextStep('register', stagesContainer);
+          stagesContainer.insertAdjacentHTML('afterend', form)
+
+          contentContainer.querySelector('#loader-container').remove();
+        }, 1000);
+
+      })
+    }
+  }
+
+  changeStages(stageType, stagesContainer) {
+    const stages = stagesContainer.querySelectorAll('.no');
+
+    switch (stageType) {
+      case 'register':
+        stagesContainer.classList.remove('login', 'welcome-stages');
+        stagesContainer.classList.add('register');
+
+        stages.forEach(stage => {
+          stage.style.display = 'inline-block';
+        });
+
+        break;
+
+      case 'login':
+        stagesContainer.classList.remove('register', 'welcome-stages');
+        stagesContainer.classList.add('login');
+
+        stages.forEach((stage, index) => {
+          if(index === 2 || index === 3) {
+            stage.style.display = 'none';
+          }
+        });
+
+        break;
+
+      case 'welcome':
+        stagesContainer.classList.remove('register', 'login');
+        stagesContainer.classList.add('welcome-stages');
+
+        stages.forEach(stage => {
+          if (index === 2 || index === 3) {
+            stage.style.display = 'none';
+          }
+        });
+
+        break;
+      default:
+        break;
+    }
+  }
+
+  nextStep(stageType, stagesContainer) {
+    const stages = stagesContainer.querySelectorAll('span.stage');
+
+    switch (stageType) {
+      case "register":
+        stages[this._step + 1].classList.add('active');
+        this._step += 1;
+        break;
+      case "login":
+        if (this._step >= 1) {
+          stages[stages.length - 1].classList.add('active')
+        }
+        else {
+          stages[this._step + 1].classList.add('active');
+          this._step += 1;
+        }
+        break;
+      default:
+        break;
+    }
   }
 
 
@@ -151,11 +253,11 @@ export default class LogonContainer extends HTMLElement {
   getStages() {
     return `
       <div class="stages welcome-stages">
-				<span class="no first active">1</span>
-				<span class="no second">2</span>
-				<span class="no third">3</span>
-				<span class="no fourth">4</span>
-				<span class="done">
+				<span class="no stage first active">1</span>
+				<span class="no stage second">2</span>
+				<span class="no stage third">3</span>
+				<span class="no stage fourth">4</span>
+				<span class="stage done">
 					<span class="left"></span>
 					<span class="right"></span>
 				</span>
@@ -170,8 +272,8 @@ export default class LogonContainer extends HTMLElement {
 					Connect with your audience, amplify collaborations, and share your knowledge without limits.
 					Build a vibrant project hub where ideas ignite and progress shines.
 				</p>
-				<a href="/login/">Login</a>
-				<a href="/register/">Register</a>
+				<a href="/login/" class="login">Login</a>
+				<a href="/register/" class="register">Register</a>
 				<div class="info">
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill"
 						viewBox="0 0 16 16">
@@ -185,9 +287,9 @@ export default class LogonContainer extends HTMLElement {
     `
   }
 
-  getForm() {
+  getRegistrationForm() {
     return `
-      <form class="fields initial bio">
+      <form class="fields initial">
 				<div class="field username">
 					<div class="input-group">
 						<label for="username" class="center">Choose your username</label>
@@ -205,57 +307,63 @@ export default class LogonContainer extends HTMLElement {
 						<span class="status">Username is taken!</span>
 					</div>
 				</div>
-				<div class="field bio">
-					<div class="input-group firstname">
-						<label for="firstname" class="center">First name</label>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-							<path
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-						</svg>
-						<input data-name="firstname" type="text" name="firstname" id="firstname" placeholder="Enter your first name" required>
-						<span class="status">First name is required</span>
-					</div>
-					<div class="input-group lastname">
-						<label for="lastname" class="center">Last name</label>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-							<path
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-						</svg>
-						<input data-name="lastname" type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
-						<span class="status">Last name is required</span>
-					</div>
-					<div class="input-group email failed">
-						<label for="email" class="center">Email</label>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-							<path
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-						</svg>
-						<input data-name="email" type="email" name="email" id="email" placeholder="Enter your email" required>
-						<span class="status">Email is required</span>
-					</div>
+				<div class="actions">
+					<button type="button" class="action prev">
+						<span class="text">Back</span>
+					</button>
+					<button type="submit" class="action next">
+						<span class="text">Continue</span>
+					</button>
 				</div>
+			</form>
+    `
+  }
 
-				<div class="field password bio">
-					<div class="input-group password">
-						<label for="password" class="center">Password</label>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-							<path
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-						</svg>
-						<input data-name="password" type="password" name="password" id="password" placeholder="Enter your password" required>
-						<span class="status">Password is required</span>
-					</div>
-					<div class="input-group repeat-password">
-						<label for="password2" class="center">Repeat password</label>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-							<path
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-						</svg>
-						<input data-name="password2" type="password" name="password2" id="password2" placeholder="Repeate your password" required>
-						<span class="status">Password is required</span>
-					</div>
+  getBioFields() {
+    return `
+      <div class="field bio">
+				<div class="input-group firstname">
+					<label for="firstname" class="center">First name</label>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+						<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+					</svg>
+					<input data-name="firstname" type="text" name="firstname" id="firstname" placeholder="Enter your first name" required>
+					<span class="status">First name is required</span>
 				</div>
+				<div class="input-group lastname">
+					<label for="lastname" class="center">Last name</label>
+					<input data-name="lastname" type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
+					<span class="status">Last name is required</span>
+				</div>
+				<div class="input-group email failed">
+					<label for="email" class="center">Email</label>
+					<input data-name="email" type="email" name="email" id="email" placeholder="Enter your email" required>
+					<span class="status">Email is required</span>
+				</div>
+			</div>
+    `
+  }
 
+  getPasswordFields() {
+    return `
+      <div class="field password bio">
+				<div class="input-group password">
+					<label for="password" class="center">Password</label>
+					<input data-name="password" type="password" name="password" id="password" placeholder="Enter your password" required>
+					<span class="status">Password is required</span>
+				</div>
+				<div class="input-group repeat-password">
+					<label for="password2" class="center">Repeat password</label>
+					<input data-name="password2" type="password" name="password2" id="password2" placeholder="Repeate your password" required>
+					<span class="status">Password is required</span>
+				</div>
+			</div>
+    `
+  }
+
+  getLoginForm() {
+    return `
+      <form class="fields initial bio">
 				<div class="field login bio">
 					<div class="input-group password">
 						<label for="user-key" class="center">Username or email</label>
@@ -283,7 +391,7 @@ export default class LogonContainer extends HTMLElement {
 						<span class="text">Back</span>
 					</button>
 					<button type="submit" class="action next">
-						<span class="text">Continue</span>
+						<span class="text">Login</span>
 					</button>
 				</div>
 			</form>
@@ -337,6 +445,45 @@ export default class LogonContainer extends HTMLElement {
           display: flex;
           align-items: center;
           justify-content: center;
+        }
+
+        #loader-container {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          z-index: 5;
+          background-color: #ffffff38;
+          backdrop-filter: blur(1px);
+          -webkit-backdrop-filter: blur(1px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: inherit;
+          -webkit-border-radius: inherit;
+          -moz-border-radius: inherit;
+          -ms-border-radius: inherit;
+          -o-border-radius: inherit;
+        }
+
+        #loader-container > .loader {
+          width: 35px;
+          aspect-ratio: 1;
+          --_g: no-repeat radial-gradient(farthest-side, #18A565 94%, #0000);
+          --_g1: no-repeat radial-gradient(farthest-side, #21D029 94%, #0000);
+          --_g2: no-repeat radial-gradient(farthest-side, #df791a 94%, #0000);
+          --_g3: no-repeat radial-gradient(farthest-side, #f09c4e 94%, #0000);
+          background:    var(--_g) 0 0,    var(--_g1) 100% 0,    var(--_g2) 100% 100%,    var(--_g3) 0 100%;
+          background-size: 30% 30%;
+          animation: l38 .9s infinite ease-in-out;
+          -webkit-animation: l38 .9s infinite ease-in-out;
+        }
+
+        @keyframes l38 {
+          100% {
+            background-position: 100% 0, 100% 100%, 0 100%, 0 0
+          }
         }
 
         .area {

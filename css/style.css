@@ -7,13 +7,22 @@ Author: Fredrick Femar Ochieng
 Author URL: https://femar.co.ke
 
 
-/* Fonts
-==================================== */
+/*
+
+  Fonts
+  =====
+
+*/
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sen:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
-/* Normalize
-==================================== */
+/*
+
+  Variables
+  =========
+
+*/
 :root {
   --font-main: 'Plus Jakarta Sans';
   --font-mono: 'Jetbrains Mono';
@@ -116,43 +125,4 @@ Typography End
   -webkit-transition: all 650ms ease-in-out;
   transition: all 650ms ease-in-out;
   border-radius: 6px;
-}
-
-
-#loader-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 5;
-  background-color: #ffffff38;
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: inherit;
-  -webkit-border-radius: inherit;
-  -moz-border-radius: inherit;
-  -ms-border-radius: inherit;
-  -o-border-radius: inherit;
-}
-
-#loader-container > .loader {
-  width: 35px;
-  aspect-ratio: 1;
-  --_g: no-repeat radial-gradient(farthest-side, #18A565 94%, #0000);
-  --_g1: no-repeat radial-gradient(farthest-side, #21D029 94%, #0000);
-  --_g2: no-repeat radial-gradient(farthest-side, #df791a 94%, #0000);
-  --_g3: no-repeat radial-gradient(farthest-side, #f09c4e 94%, #0000);
-  background:    var(--_g) 0 0,    var(--_g1) 100% 0,    var(--_g2) 100% 100%,    var(--_g3) 0 100%;
-  background-size: 30% 30%;
-  animation: l38 .9s infinite ease-in-out;
-  -webkit-animation: l38 .9s infinite ease-in-out;
-}
-@keyframes l38 {
-  100% {
-    background-position: 100% 0, 100% 100%, 0 100%, 0 0
-  }
 }
