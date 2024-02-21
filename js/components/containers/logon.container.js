@@ -151,10 +151,13 @@ export default class LogonContainer extends HTMLElement {
 
   validateUsername(form) {
     const outerThis = this;
+    const submitButton = form.querySelector('.actions > .action.next ');
     const inputField = form.querySelector('.field.username');
     const inputGroup = inputField.querySelector('.input-group');
     form.addEventListener('submit', e => {
       e.preventDefault();
+      submitButton.innerHTML = outerThis.getButtonLoader();
+      submitButton.style.setProperty("pointer-events", 'none');
       inputGroup.classList.remove('success', 'failed');
       let svg = inputGroup.querySelector('svg');
       if (svg) {
@@ -171,27 +174,58 @@ export default class LogonContainer extends HTMLElement {
         status.textContent = msg;
         inputGroup.insertAdjacentHTML('beforeend', outerThis._failed);
         inputGroup.classList.add('failed');
+
+        setTimeout(() => {
+          submitButton.innerHTML = `<span class="text">Continue</span>`
+          submitButton.style.setProperty("pointer-events", 'auto');
+        }, 1000);
       }
       else if (inputValue.length < 5) {
         msg = 'Username must be 5 characters or more!'
         status.textContent = msg;
         inputGroup.insertAdjacentHTML('beforeend', outerThis._failed);
         inputGroup.classList.add('failed');
+
+        setTimeout(() => {
+          submitButton.innerHTML = `<span class="text">Continue</span>`
+          submitButton.style.setProperty("pointer-events", 'auto');
+        }, 1000);
       }
 
       else {
-        msg = 'Username is available'
-        status.textContent = msg;
-        inputGroup.insertAdjacentHTML('beforeend', outerThis._success);
-        inputGroup.classList.add('success');
+        // Call API
+        outerThis.checkUsername(form, inputValue, inputGroup, status);
       }
-
-      // setTimeout(() => {
-      //   inputGroup.classList.remove('success', 'failed');
-      //   inputGroup.querySelector('svg').remove();
-      // }, 2000);
-
     })
+  }
+
+  checkUsername(form, inputValue, inputGroup, status) {
+    const submitButton = form.querySelector('.actions > .action.next ');
+
+    // After API call
+    let msg = 'Username is available' // From API
+
+
+    status.textContent = msg;
+    inputGroup.insertAdjacentHTML('beforeend', this._success);
+
+    setTimeout(() => {
+      inputGroup.classList.add('success');
+    }, 2000);
+
+    setTimeout(() => {
+      submitButton.innerHTML = `<span class="text">Continue</span>`
+      submitButton.style.setProperty("pointer-events", 'auto');
+      this.activateBio(form)
+    }, 3000);
+  }
+
+  activateBio(form) {
+    const stagesContainer = form.parentElement.querySelector('.stages');
+    form.firstElementChild.remove()
+    this.nextStep('register', stagesContainer);
+
+    form.insertAdjacentHTML('afterbegin', this.getBioFields())
   }
 
 
@@ -294,6 +328,14 @@ export default class LogonContainer extends HTMLElement {
       <div id="loader-container">
 				<div class="loader"></div>
 			</div>
+    `
+  }
+
+  getButtonLoader() {
+    return `
+      <span id="btn-loader">
+				<span class="loader"></span>
+			</span>
     `
   }
 
@@ -534,6 +576,39 @@ export default class LogonContainer extends HTMLElement {
           100% {
             background-position: 100% 0, 100% 100%, 0 100%, 0 0
           }
+        }
+
+        #btn-loader {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          z-index: 5;
+          /*background-color: #ffffff38;
+          backdrop-filter: blur(1px);
+          -webkit-backdrop-filter: blur(1px);*/
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: inherit;
+          -webkit-border-radius: inherit;
+          -moz-border-radius: inherit;
+          -ms-border-radius: inherit;
+          -o-border-radius: inherit;
+        }
+
+        #btn-loader > .loader {
+          width: 20px;
+          aspect-ratio: 1;
+          --_g: no-repeat radial-gradient(farthest-side, #ffffff 94%, #0000);
+          --_g1: no-repeat radial-gradient(farthest-side, #ffffff 94%, #0000);
+          --_g2: no-repeat radial-gradient(farthest-side, #df791a 94%, #0000);
+          --_g3: no-repeat radial-gradient(farthest-side, #f09c4e 94%, #0000);
+          background:    var(--_g) 0 0,    var(--_g1) 100% 0,    var(--_g2) 100% 100%,    var(--_g3) 0 100%;
+          background-size: 30% 30%;
+          animation: l38 .9s infinite ease-in-out;
+          -webkit-animation: l38 .9s infinite ease-in-out;
         }
 
         .area {
@@ -1119,7 +1194,7 @@ export default class LogonContainer extends HTMLElement {
         }
 
 
-        .logon-container>.fields .actions>.action {
+        .logon-container > .fields .actions > .action {
           display: flex;
           flex-flow: row;
           justify-content: center;
@@ -1134,37 +1209,39 @@ export default class LogonContainer extends HTMLElement {
           color: #404040;
           width: 120px;
           padding: 8px 10px;
+          height: 40px;
           cursor: pointer;
+          position: relative;
           -webkit-border-radius: 15px;
           -moz-border-radius: 15px;
           -ms-border-radius: 15px;
           -o-border-radius: 15px;
         }
 
-        .logon-container>.fields .actions>.action.prev {
+        .logon-container > .fields .actions > .action.prev {
           background-color: rgb(57, 56, 56);
           background: linear-gradient(0deg, rgba(57, 56, 56, 0.087) 0%, rgba(57, 56, 56, 0.187) 100%);
         }
 
-        .logon-container>.fields .actions>.action.prev svg path {
+        .logon-container > .fields .actions > .action.prev svg path {
           fill: #404040;
         }
 
-        .logon-container>.fields .actions>.action.next {
+        .logon-container > .fields .actions > .action.next {
           color: #ffffff;
           background: #ad5389;
           background: linear-gradient(0deg, rgba(20, 167, 62, 1) 0%, rgba(102, 247, 113, 1) 100%);
           background-color: rgb(247, 145, 162);
         }
 
-        .logon-container>.fields .actions>.action.next svg path {
+        .logon-container >.fields .actions > .action.next svg path {
           fill: #ffffff;
         }
 
         .logon-container>.fields .actions>.action.disabled {
-          background: #80808023;
+          /*background: #80808023;*/
           pointer-events: none;
-          opacity: .9;
+          /*opacity: .9;*/
         }
 
 
