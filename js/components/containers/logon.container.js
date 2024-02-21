@@ -9,6 +9,18 @@ export default class LogonContainer extends HTMLElement {
 
     this._step = 0;
 
+    this._success = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+				<path	d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+			</svg>
+    `
+
+    this._failed = `
+		  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"	viewBox="0 0 16 16">
+				<path	d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+			</svg>
+    `
+
     this.render();
   }
 
@@ -65,6 +77,8 @@ export default class LogonContainer extends HTMLElement {
           stagesContainer.insertAdjacentHTML('afterend', form)
 
           contentContainer.querySelector('#loader-container').remove();
+
+          outerThis.validateUsername(contentContainer.querySelector('form'));
         }, 1000);
 
       })
@@ -133,6 +147,51 @@ export default class LogonContainer extends HTMLElement {
       default:
         break;
     }
+  }
+
+  validateUsername(form) {
+    const outerThis = this;
+    const inputField = form.querySelector('.field.username');
+    const inputGroup = inputField.querySelector('.input-group');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      inputGroup.classList.remove('success', 'failed');
+      let svg = inputGroup.querySelector('svg');
+      if (svg) {
+        svg.remove();
+      }
+
+      const inputValue = inputGroup.querySelector('input').value.trim();
+      // console.log(inputValue);
+      const status = inputGroup.querySelector('span.status');
+
+      let msg = 'Username is required!'
+
+      if (inputValue === '') {
+        status.textContent = msg;
+        inputGroup.insertAdjacentHTML('beforeend', outerThis._failed);
+        inputGroup.classList.add('failed');
+      }
+      else if (inputValue.length < 5) {
+        msg = 'Username must be 5 characters or more!'
+        status.textContent = msg;
+        inputGroup.insertAdjacentHTML('beforeend', outerThis._failed);
+        inputGroup.classList.add('failed');
+      }
+
+      else {
+        msg = 'Username is available'
+        status.textContent = msg;
+        inputGroup.insertAdjacentHTML('beforeend', outerThis._success);
+        inputGroup.classList.add('success');
+      }
+
+      // setTimeout(() => {
+      //   inputGroup.classList.remove('success', 'failed');
+      //   inputGroup.querySelector('svg').remove();
+      // }, 2000);
+
+    })
   }
 
 
@@ -293,16 +352,6 @@ export default class LogonContainer extends HTMLElement {
 				<div class="field username">
 					<div class="input-group">
 						<label for="username" class="center">Choose your username</label>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill"
-							viewBox="0 0 16 16">
-							<path
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-						</svg>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill"
-							viewBox="0 0 16 16">
-							<path
-								d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
-						</svg>
 						<input data-name="username" type="text" name="username" id="username" placeholder="Enter your desired username" required>
 						<span class="status">Username is taken!</span>
 					</div>
@@ -399,13 +448,14 @@ export default class LogonContainer extends HTMLElement {
   }
 
   getFooter() {
+    const newDate = new Date(Date.now());
     return `
       <ul class="footer">
 				<li>
 					<span class="dot"></span>
 					<a href="" class="copyright">
 						<span class="copy">&copy;</span>
-						<span class="year">2024</span>
+						<span class="year">${newDate.getFullYear()}</span>
 						aduki Inc.
 					</a>
 				</li>
@@ -958,16 +1008,18 @@ export default class LogonContainer extends HTMLElement {
         .logon-container>.fields .field .input-group > svg {
           display: none;
         }
-        .logon-container>.fields.success .field .input-group>svg,
-        .logon-container>.fields.failed .field .input-group>svg {
+
+        .logon-container>.fields .field .input-group.success > svg,
+        .logon-container >.fields .field  .input-group.failed > svg {
           bottom: 30px;
+          display: inline-block;
         }
 
-        .logon-container>.fields.success .field .input-group > svg {
+        .logon-container>.fields .field .input-group.success > svg {
           color: #18A565;
         }
 
-        .logon-container>.fields.failed .field .input-group > svg {
+        .logon-container >.fields .field  .input-group.failed > svg {
           color: #ec4b19;
         }
 
@@ -1012,23 +1064,21 @@ export default class LogonContainer extends HTMLElement {
           border: 1px solid #08b86f60;
         }
 
-        .logon-container >.fields.success .field input,
-        .logon-container >.fields.success .field input:focus {
+        .logon-container >.fields .field  .input-group.success input,
+        .logon-container >.fields .field  .input-group.success input:focus {
           border: 1px solid #08b86f60;
         }
 
         .logon-container >.fields .field  .input-group.failed input,
-        .logon-container >.fields.failed .field input,
-        .logon-container >.fields.failed .field input:focus {
+        .logon-container >.fields .field  .input-group.failed input:focus {
           border: 1px solid  #ec4a1965;
         }
 
-        .logon-container>.fields.success .field input {
+        .logon-container >.fields .field  .input-group.success input {
           color: #18A565;
         }
 
-        .logon-container>.fields .field .input-group.failed input,
-        .logon-container>.fields.failed .field input {
+        .logon-container>.fields .field .input-group.failed input {
           color: #ec4b19;
         }
 
@@ -1047,14 +1097,13 @@ export default class LogonContainer extends HTMLElement {
           padding: 0 0 0 5px;
         }
 
-        .logon-container>.fields .field .input-group.failed span.status,
-        .logon-container >.fields.failed .field span.status {
+        .logon-container>.fields .field .input-group.failed span.status {
           color: #ec4b19;
           font-size: 0.8rem;
           display: inline-block;
         }
 
-        .logon-container >.fields.success .field span.status {
+        .logon-container >.fields .field  .input-group.success span.status {
           color: #18A565;
           font-size: 0.8rem;
           display: inline-block;
