@@ -21,6 +21,8 @@ export default class LogonContainer extends HTMLElement {
 			</svg>
     `
 
+    this._data = {};
+
     this.render();
   }
 
