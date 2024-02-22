@@ -21,7 +21,11 @@ export default class LogonContainer extends HTMLElement {
 			</svg>
     `
 
-    this._data = {};
+    this._data = {
+      "register": {},
+      "login": {},
+      "recovery": {}
+    };
 
     this.render();
   }
@@ -159,13 +163,13 @@ export default class LogonContainer extends HTMLElement {
       switch (stageType) {
         case 'register':
           if (outerThis._step === 1) {
-            outerThis.validateUsername(form)
+            outerThis.validateUsername(form);
           }
           else if (outerThis._step === 2) {
-            return
+            outerThis.validateBio(form);
           }
           else if (outerThis._step === 3) {
-            return
+            outerThis.validatePassword(form);
           }
           break;
         default:
@@ -228,6 +232,9 @@ export default class LogonContainer extends HTMLElement {
     // After API call
     let msg = 'Username is available' // From API
 
+    //Add user to the data object
+    this._data.register['username'] = inputValue;
+
 
     status.textContent = msg;
     inputGroup.insertAdjacentHTML('beforeend', this._success);
@@ -249,6 +256,262 @@ export default class LogonContainer extends HTMLElement {
     this.nextStep('register', stagesContainer);
 
     form.insertAdjacentHTML('afterbegin', this.getBioFields())
+  }
+
+  validateBio(form) {
+    const outerThis = this;
+    const submitButton = form.querySelector('.actions > .action.next ');
+    const inputField = form.querySelector('.field.bio');
+
+    // const inputGroups = inputField.querySelectorAll('.input-group');
+    const firstName = inputField.querySelector('.input-group.firstname');
+    const lastname = inputField.querySelector('.input-group.lastname');
+    const email = inputField.querySelector('.input-group.email');
+
+    submitButton.innerHTML = outerThis.getButtonLoader();
+    submitButton.style.setProperty("pointer-events", 'none');
+
+
+    // Validate names
+    if (this.validateName(firstName) && this.validateName(lastname)) {
+      const input = email.querySelector('input').value.trim();
+
+      email.classList.remove('success', 'failed');
+      let svg = email.querySelector('svg');
+      if (svg) {
+        svg.remove();
+      }
+      const emailStatus = email.querySelector('span.status');
+
+      if (input === '') {
+        emailStatus.textContent = 'Enter a valid email!';
+        email.insertAdjacentHTML('beforeend', outerThis._failed);
+        email.classList.add('failed');
+
+        setTimeout(() => {
+          submitButton.innerHTML = `<span class="text">Continue</span>`
+          submitButton.style.setProperty("pointer-events", 'auto');
+        }, 1000);
+      }
+      else {
+
+        let validRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+        if (input.match(validRegex)) {
+
+          // Call the API
+          outerThis.checkEmail(form, input, email, emailStatus);
+        }
+        else {
+          emailStatus.textContent = 'Enter a valid email!';
+          email.insertAdjacentHTML('beforeend', outerThis._failed);
+          email.classList.add('failed');
+
+          setTimeout(() => {
+            submitButton.innerHTML = `<span class="text">Continue</span>`
+            submitButton.style.setProperty("pointer-events", 'auto');
+          }, 1000);
+        }
+      }
+    }
+  }
+
+  validateName(nameElement) {
+    const inputElement = nameElement.querySelector('input')
+    const input = nameElement.querySelector('input').value.trim();
+
+    nameElement.classList.remove('success', 'failed');
+    let svg = nameElement.querySelector('svg');
+    if (svg) {
+      svg.remove();
+    }
+    const nameStatus = nameElement.querySelector('span.status');
+
+    if (input === '') {
+      nameStatus.textContent = 'This field is required!';
+      nameElement.insertAdjacentHTML('beforeend', outerThis._failed);
+      nameElement.classList.add('failed');
+
+      setTimeout(() => {
+        submitButton.innerHTML = `<span class="text">Continue</span>`
+        submitButton.style.setProperty("pointer-events", 'auto');
+      }, 1000);
+
+      return false;
+    }
+    else {
+      nameStatus.textContent = '';
+      nameElement.insertAdjacentHTML('beforeend', this._success);
+
+      if (inputElement.dataset.name === "firstname") {
+        this._data.register['firstname'] = input;
+      }
+      else {
+        this._data.register['lastname'] = input;
+      }
+
+      nameElement.classList.add('success');
+
+      return true;
+    }
+  }
+
+  checkEmail(form, input, email, emailStatus) {
+    const submitButton = form.querySelector('.actions > .action.next ');
+
+    // After API call
+    let msg = 'Username is available' // From API
+
+    //Add user to the data object
+    this._data.register['username'] = input;
+
+    emailStatus.textContent = msg;
+    email.insertAdjacentHTML('beforeend', this._success);
+
+    this._data.register['email'] = input;
+
+    setTimeout(() => {
+      email.classList.add('success');
+    }, 1000);
+
+
+    setTimeout(() => {
+      submitButton.innerHTML = `<span class="text">Register</span>`
+      submitButton.style.setProperty("pointer-events", 'auto');
+      this.activatePassword(form)
+    }, 2000);
+  }
+
+  activatePassword(form) {
+    const stagesContainer = form.parentElement.querySelector('.stages');
+    form.firstElementChild.remove()
+    this.nextStep('register', stagesContainer);
+
+    // console.log(this.getPasswordFields());
+
+    form.insertAdjacentHTML('afterbegin', this.getPasswordFields())
+  }
+
+  validatePassword(form) {
+    const outerThis = this;
+    const submitButton = form.querySelector('.actions > .action.next ');
+    const inputField = form.querySelector('.field.password');
+
+    // const inputGroups = inputField.querySelectorAll('.input-group');
+    const password = inputField.querySelector('.input-group.password');
+    const repeatPassword = inputField.querySelector('.input-group.repeat-password');
+
+    submitButton.innerHTML = outerThis.getButtonLoader();
+    submitButton.style.setProperty("pointer-events", 'none');
+
+    const input = password.querySelector('input').value.trim();
+    const inputRepeat = repeatPassword.querySelector('input').value.trim();
+
+    password.classList.remove('success', 'failed');
+    repeatPassword.classList.remove('success', 'failed');
+    let svg = password.querySelector('svg');
+    let svgRepeat = repeatPassword.querySelector('svg');
+    if (svg && svgRepeat) {
+      svg.remove();
+      svgRepeat.remove();
+    }
+
+
+    const passwordStatus = password.querySelector('span.status');
+    const repeatStatus = repeatPassword.querySelector('span.status');
+
+    if (input === '') {
+      passwordStatus.textContent = 'Password is required!';
+      password.insertAdjacentHTML('beforeend', outerThis._failed);
+      password.classList.add('failed');
+
+      setTimeout(() => {
+        submitButton.innerHTML = `<span class="text">Continue</span>`
+        submitButton.style.setProperty("pointer-events", 'auto');
+      }, 1000);
+    }
+    else {
+      if(this.isPassword(input, password, passwordStatus)){
+        if (input === inputRepeat) {
+          repeatStatus.textContent = '';
+          repeatPassword.insertAdjacentHTML('beforeend', this._success);
+
+          this._data.register['password'] = input;
+
+          repeatPassword.classList.add('success');
+        }
+        else {
+          repeatStatus.textContent = 'Passwords must match be equal!';
+          repeatPassword.insertAdjacentHTML('beforeend', outerThis._failed);
+          repeatPassword.classList.add('failed');
+
+          setTimeout(() => {
+            submitButton.innerHTML = `<span class="text">Continue</span>`
+            submitButton.style.setProperty("pointer-events", 'auto');
+          }, 1000);
+        }
+      }
+      else {
+        setTimeout(() => {
+          submitButton.innerHTML = `<span class="text">Continue</span>`
+          submitButton.style.setProperty("pointer-events", 'auto');
+        }, 1000);
+      }
+    }
+  }
+
+  isPassword(input, password, passwordStatus) {
+    const outerThis = this;
+    // Regular expressions for each criterion
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const digitRegex = /[0-9]/;
+    const specialSymbolRegex = /[^A-Za-z0-9]/;
+
+    // Check each criterion
+    if (input.length < 6) {
+      passwordStatus.textContent = "Password must be at least 6 characters long.";
+      password.insertAdjacentHTML('beforeend', outerThis._failed);
+      password.classList.add('failed');
+
+      return false;
+    }
+    else if (!uppercaseRegex.test(input)) {
+      passwordStatus.textContent = "Password must contain at least one uppercase letter.";
+      password.insertAdjacentHTML('beforeend', outerThis._failed);
+      password.classList.add('failed');
+
+      return false;
+    }
+    else if (!lowercaseRegex.test(input)) {
+      passwordStatus.textContent = "Password must contain at least one lowercase letter.";
+      password.insertAdjacentHTML('beforeend', outerThis._failed);
+      password.classList.add('failed');
+
+      return false;
+    }
+    else if (!digitRegex.test(input)) {
+      passwordStatus.textContent = "Password must contain at least one digit.";
+      password.insertAdjacentHTML('beforeend', outerThis._failed);
+      password.classList.add('failed');
+
+      return false;
+    }
+    else if (!specialSymbolRegex.test(input)) {
+      passwordStatus.textContent = "Password must contain at least one special symbol.";
+      password.insertAdjacentHTML('beforeend', outerThis._failed);
+      password.classList.add('failed');
+
+      return false;
+    }
+    else {
+      passwordStatus.textContent = '';
+      password.insertAdjacentHTML('beforeend', this._success);
+
+      password.classList.add('success');
+
+      return true;
+    }
   }
 
 
@@ -441,17 +704,17 @@ export default class LogonContainer extends HTMLElement {
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 						<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
 					</svg>
-					<input data-name="firstname" type="text" name="firstname" id="firstname" placeholder="Enter your first name" required>
+					<input data-name="Firstname" type="text" name="firstname" id="firstname" placeholder="Enter your first name" required>
 					<span class="status">First name is required</span>
 				</div>
 				<div class="input-group lastname">
 					<label for="lastname" class="center">Last name</label>
-					<input data-name="lastname" type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
+					<input data-name="Lastname" type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
 					<span class="status">Last name is required</span>
 				</div>
 				<div class="input-group email">
 					<label for="email" class="center">Email</label>
-					<input data-name="email" type="email" name="email" id="email" placeholder="Enter your email" required>
+					<input data-name="Email" type="email" name="email" id="email" placeholder="Enter your email" required>
 					<span class="status">Email is required</span>
 				</div>
 			</div>
@@ -1073,7 +1336,7 @@ export default class LogonContainer extends HTMLElement {
           /* border: 1px solid black; */
           display: grid;
           grid-template-columns: 1fr 1fr;
-          align-items: center;
+          /*align-items: center;*/
           justify-content: center;
           column-gap: 20px;
           row-gap: 20px;
@@ -1123,7 +1386,7 @@ export default class LogonContainer extends HTMLElement {
         .logon-container>.fields .field .input-group > svg {
           position: absolute;
           right: 10px;
-          bottom: 10px;
+          top: 38px;
           width: 20px;
           height: 20px;
         }
@@ -1132,9 +1395,10 @@ export default class LogonContainer extends HTMLElement {
           display: none;
         }
 
-        .logon-container>.fields .field .input-group.success > svg,
+        .logon-container>.fields .field .input-group.success > svg {
+          display: inline-block;
+        }
         .logon-container >.fields .field  .input-group.failed > svg {
-          bottom: 30px;
           display: inline-block;
         }
 
@@ -1232,6 +1496,9 @@ export default class LogonContainer extends HTMLElement {
           display: inline-block;
         }
 
+        .logon-container >.fields .field  .input-group.success span.status {
+          display: none;
+        }
 
         .logon-container>.fields .actions {
           display: flex;
@@ -1240,7 +1507,6 @@ export default class LogonContainer extends HTMLElement {
           width: 90%;
           margin: 20px 0 0 0;
         }
-
 
         .logon-container > .fields .actions > .action {
           display: flex;
