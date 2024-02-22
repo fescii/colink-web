@@ -527,6 +527,31 @@ export default class LogonContainer extends HTMLElement {
         * {
           box-sizing: border-box !important;
         }
+        *,
+        *:after,
+        *:before {
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          font-family: var(--font-main), sans-serif;
+        }
+
+        *:focus {
+          outline: inherit !important;
+        }
+
+        *::-webkit-scrollbar {
+          width: 3px;
+        }
+
+        *::-webkit-scrollbar-track {
+          background: #DDDDD7;
+        }
+
+        *::-webkit-scrollbar-thumb {
+          width: 3px;
+          background: linear-gradient(#53595f, #627ea0);
+          border-radius: 50px;
+        }
 
         :host{
           /* border: 2px solid blue;*/
