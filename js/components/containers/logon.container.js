@@ -80,7 +80,7 @@ export default class LogonContainer extends HTMLElement {
 
           contentContainer.querySelector('#loader-container').remove();
 
-          outerThis.validateUsername(contentContainer.querySelector('form'));
+          outerThis.submitEvent('register', contentContainer.querySelector('form'));
         }, 1000);
 
       })
@@ -151,54 +151,75 @@ export default class LogonContainer extends HTMLElement {
     }
   }
 
+  submitEvent(stageType, form) {
+    const outerThis = this;
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      switch (stageType) {
+        case 'register':
+          if (outerThis._step === 1) {
+            outerThis.validateUsername(form)
+          }
+          else if (outerThis._step === 2) {
+            return
+          }
+          else if (outerThis._step === 3) {
+            return
+          }
+          break;
+        default:
+          break;
+      }
+    })
+  }
+
   validateUsername(form) {
     const outerThis = this;
     const submitButton = form.querySelector('.actions > .action.next ');
     const inputField = form.querySelector('.field.username');
     const inputGroup = inputField.querySelector('.input-group');
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      submitButton.innerHTML = outerThis.getButtonLoader();
-      submitButton.style.setProperty("pointer-events", 'none');
-      inputGroup.classList.remove('success', 'failed');
-      let svg = inputGroup.querySelector('svg');
-      if (svg) {
-        svg.remove();
-      }
 
-      const inputValue = inputGroup.querySelector('input').value.trim();
-      // console.log(inputValue);
-      const status = inputGroup.querySelector('span.status');
+    submitButton.innerHTML = outerThis.getButtonLoader();
+    submitButton.style.setProperty("pointer-events", 'none');
+    inputGroup.classList.remove('success', 'failed');
+    let svg = inputGroup.querySelector('svg');
+    if (svg) {
+      svg.remove();
+    }
 
-      let msg = 'Username is required!'
+    const inputValue = inputGroup.querySelector('input').value.trim();
+    // console.log(inputValue);
+    const status = inputGroup.querySelector('span.status');
 
-      if (inputValue === '') {
-        status.textContent = msg;
-        inputGroup.insertAdjacentHTML('beforeend', outerThis._failed);
-        inputGroup.classList.add('failed');
+    let msg = 'Username is required!'
 
-        setTimeout(() => {
-          submitButton.innerHTML = `<span class="text">Continue</span>`
-          submitButton.style.setProperty("pointer-events", 'auto');
-        }, 1000);
-      }
-      else if (inputValue.length < 5) {
-        msg = 'Username must be 5 characters or more!'
-        status.textContent = msg;
-        inputGroup.insertAdjacentHTML('beforeend', outerThis._failed);
-        inputGroup.classList.add('failed');
+    if (inputValue === '') {
+      status.textContent = msg;
+      inputGroup.insertAdjacentHTML('beforeend', outerThis._failed);
+      inputGroup.classList.add('failed');
 
-        setTimeout(() => {
-          submitButton.innerHTML = `<span class="text">Continue</span>`
-          submitButton.style.setProperty("pointer-events", 'auto');
-        }, 1000);
-      }
+      setTimeout(() => {
+        submitButton.innerHTML = `<span class="text">Continue</span>`
+        submitButton.style.setProperty("pointer-events", 'auto');
+      }, 1000);
+    }
+    else if (inputValue.length < 5) {
+      msg = 'Username must be 5 characters or more!'
+      status.textContent = msg;
+      inputGroup.insertAdjacentHTML('beforeend', outerThis._failed);
+      inputGroup.classList.add('failed');
 
-      else {
-        // Call API
-        outerThis.checkUsername(form, inputValue, inputGroup, status);
-      }
-    })
+      setTimeout(() => {
+        submitButton.innerHTML = `<span class="text">Continue</span>`
+        submitButton.style.setProperty("pointer-events", 'auto');
+      }, 1000);
+    }
+
+    else {
+      // Call API
+      outerThis.checkUsername(form, inputValue, inputGroup, status);
+    }
   }
 
   checkUsername(form, inputValue, inputGroup, status) {
@@ -428,7 +449,7 @@ export default class LogonContainer extends HTMLElement {
 					<input data-name="lastname" type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
 					<span class="status">Last name is required</span>
 				</div>
-				<div class="input-group email failed">
+				<div class="input-group email">
 					<label for="email" class="center">Email</label>
 					<input data-name="email" type="email" name="email" id="email" placeholder="Enter your email" required>
 					<span class="status">Email is required</span>
