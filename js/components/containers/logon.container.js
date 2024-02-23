@@ -711,7 +711,7 @@ export default class LogonContainer extends HTMLElement {
 				</div>
 				<div class="input-group lastname">
 					<label for="lastname" class="center">Last name</label>
-					<input data-name="fastname" type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
+					<input data-name="lastname" type="text" name="lastname" id="lastname" placeholder="Enter your last name" required>
 					<span class="status">Last name is required</span>
 				</div>
 				<div class="input-group email">
