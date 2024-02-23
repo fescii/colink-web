@@ -53,6 +53,7 @@ export default class LogonContainer extends HTMLElement {
       const contentTitle = contentContainer.querySelector('.head > .logo h2 span.action')
       const stagesContainer = contentContainer.querySelector('.stages');
       this.activateRegister(contentContainer, stagesContainer, contentTitle);
+      this.activateLogin(contentContainer, stagesContainer, contentTitle);
     }
 
   }
@@ -85,6 +86,44 @@ export default class LogonContainer extends HTMLElement {
           contentContainer.querySelector('#loader-container').remove();
 
           outerThis.submitEvent('register', contentContainer.querySelector('form'));
+          outerThis.prevStep('register', stagesContainer, contentContainer)
+        }, 1000);
+
+      })
+    }
+  }
+
+  activateLogin(contentContainer, stagesContainer, contentTitle) {
+    const loader = this.getLoader();
+    const form = this.getLoginForm();
+    const outerThis = this;
+    const loginButton = contentContainer.querySelector('a.login');
+    if (loginButton) {
+      loginButton.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        contentContainer.insertAdjacentHTML('afterbegin', loader);
+
+        const welcome = contentContainer.querySelector('.welcome');
+        const finish = contentContainer.querySelector('.finish');
+
+        setTimeout(() => {
+          if (welcome) {
+            welcome.remove();
+          }
+          if (finish) {
+            finish.remove();
+          }
+          contentTitle.textContent = 'Login';
+          outerThis.changeStages('login', stagesContainer);
+          outerThis.nextStep('login', stagesContainer);
+          stagesContainer.insertAdjacentHTML('afterend', form)
+
+          contentContainer.querySelector('#loader-container').remove();
+
+          outerThis.submitEvent('login', contentContainer.querySelector('form'));
+          outerThis.prevStep('login', stagesContainer, contentContainer)
         }, 1000);
 
       })
@@ -142,8 +181,14 @@ export default class LogonContainer extends HTMLElement {
         this._step += 1;
         break;
       case "login":
-        if (this._step >= 1) {
-          stages[stages.length - 1].classList.add('active')
+        if(this._step >= 4) {
+          stages[4].classList.remove('active');
+          stages[1].classList.add('active');
+          this._step = 1;
+        }
+        else if((this._step + 1) === 2) {
+          stages[stages.length - 1].classList.add('active');
+          this._step = (stages.length - 1);
         }
         else {
           stages[this._step + 1].classList.add('active');
@@ -153,6 +198,83 @@ export default class LogonContainer extends HTMLElement {
       default:
         break;
     }
+  }
+
+  prevStep(stageType, stagesContainer, contentContainer) {
+    const outerThis = this;
+    const welcome = this.getWelcome();
+    const form = contentContainer.querySelector('form.fields');
+    const stages = stagesContainer.querySelectorAll('span.stage');
+    const contentTitle = contentContainer.querySelector('.head > .logo h2 span.action');
+
+    const prevButton = form.querySelector('.actions > .action.prev ');
+
+    prevButton.addEventListener('click', e => {
+      e.preventDefault()
+
+      prevButton.innerHTML = outerThis.getBtnAltLoader();
+      prevButton.style.setProperty("pointer-events", 'none');
+
+      switch (stageType) {
+        case "register":
+          if (outerThis._step <= 1) {
+            setTimeout(() => {
+              stages[1].classList.remove('active');
+              form.remove();
+              stagesContainer.insertAdjacentHTML('afterend', welcome)
+              outerThis._step = 0;
+
+              outerThis.activateRegister(contentContainer, stagesContainer, contentTitle);
+              outerThis.activateLogin(contentContainer, stagesContainer, contentTitle);
+            }, 1500);
+          }
+          else if(outerThis._step === 2) {
+            setTimeout(() => {
+              stages[outerThis._step].classList.remove('active');
+              outerThis._step -= 1;
+              const currentFields = form.querySelector('.field.bio');
+              if (currentFields) {
+                currentFields.remove();
+              }
+
+              form.insertAdjacentHTML('afterbegin', outerThis.getUsernameFields())
+            }, 1500);
+          }
+          else if(outerThis._step === 3) {
+            setTimeout(() => {
+              stages[outerThis._step].classList.remove('active');
+              outerThis._step -= 1;
+              const currentFields = form.querySelector('.field.password');
+              if (currentFields) {
+                currentFields.remove();
+              }
+
+              form.insertAdjacentHTML('afterbegin', outerThis.getBioFields())
+            }, 1500);
+          }
+          break;
+        case "login":
+          if (this._step <= 1) {
+            setTimeout(() => {
+              stages[1].classList.remove('active');
+              form.remove();
+              stagesContainer.insertAdjacentHTML('afterend', welcome)
+              outerThis._step = 0;
+
+              outerThis.activateRegister(contentContainer, stagesContainer, contentTitle);
+              outerThis.activateLogin(contentContainer, stagesContainer, contentTitle);
+            }, 1500);
+          }
+          break;
+        default:
+          break;
+      }
+
+      setTimeout(() => {
+        prevButton.innerHTML = `<span class="text">Back</span>`
+        prevButton.style.setProperty("pointer-events", 'auto');
+      }, 1500);
+    })
   }
 
   submitEvent(stageType, form) {
@@ -172,10 +294,97 @@ export default class LogonContainer extends HTMLElement {
             outerThis.validatePassword(form);
           }
           break;
+        case 'login':
+          outerThis.validateLogin(form);
         default:
           break;
       }
     })
+  }
+
+  validateLogin(form) {
+    const outerThis = this;
+    const data = {};
+    const submitButton = form.querySelector('.actions > .action.next ');
+    const inputField = form.querySelector('.field.login');
+    const userKeyGroup = inputField.querySelector('.input-group.user-key');
+    const passwordGroup = inputField.querySelector('.input-group.password');
+
+    submitButton.innerHTML = outerThis.getButtonLoader();
+    submitButton.style.setProperty("pointer-events", 'none');
+
+    userKeyGroup.classList.remove('success', 'failed');
+    passwordGroup.classList.remove('success', 'failed');
+
+    let svg = userKeyGroup.querySelector('svg');
+    let passwordSvg = passwordGroup.querySelector('svg');
+    if (svg && passwordSvg) {
+      svg.remove();
+      passwordSvg.remove();
+    }
+
+    const userKeyValue = userKeyGroup.querySelector('input').value.trim();
+    const passwordValue = passwordGroup.querySelector('input').value.trim();
+
+    const userKeyStatus = userKeyGroup.querySelector('span.status');
+    const passwordStatus = passwordGroup.querySelector('span.status');
+
+
+    if (userKeyValue === '') {
+      userKeyStatus.textContent = 'Username or email is required!';
+      userKeyGroup.insertAdjacentHTML('beforeend', outerThis._failed);
+      userKeyGroup.classList.add('failed');
+
+      setTimeout(() => {
+        submitButton.innerHTML = `<span class="text">Login</span>`
+        submitButton.style.setProperty("pointer-events", 'auto');
+      }, 1000);
+    }
+    else {
+      userKeyGroup.insertAdjacentHTML('beforeend', this._success);
+      setTimeout(() => {
+        userKeyGroup.classList.add('success');
+      }, 2000);
+      data['user-key'] = userKeyValue;
+    }
+
+    if (passwordValue === '') {
+      passwordStatus.textContent = 'Password is required!';
+      passwordGroup.insertAdjacentHTML('beforeend', outerThis._failed);
+      passwordGroup.classList.add('failed');
+
+      setTimeout(() => {
+        submitButton.innerHTML = `<span class="text">Login</span>`
+        submitButton.style.setProperty("pointer-events", 'auto');
+      }, 1000);
+    }
+    else {
+      passwordGroup.insertAdjacentHTML('beforeend', this._success);
+      setTimeout(() => {
+        passwordGroup.classList.add('success');
+      }, 2000);
+      data['password'] = passwordValue;
+    }
+
+    if (data['user-key'] && data['password']) {
+      //API CALL
+      outerThis.performLogin(form, data)
+    }
+  }
+
+  performLogin(form, data) {
+    const outerThis = this;
+    const submitButton = form.querySelector('.actions > .action.next ');
+
+    // After API call
+    let _msg = 'Username is available' // From API
+
+    setTimeout(() => {
+      submitButton.innerHTML = `<span class="text">Continue</span>`
+      submitButton.style.setProperty("pointer-events", 'auto');
+
+      outerThis.activateLoginFinish(form.parentElement, 'Fredrick');
+    }, 3000);
   }
 
   validateUsername(form) {
@@ -438,9 +647,12 @@ export default class LogonContainer extends HTMLElement {
 
           this._data.register['password'] = input;
 
-          console.log(this._data);
+          // console.log(this._data);
 
           repeatPassword.classList.add('success');
+
+          // API Call
+          this.activateFinish(form.parentElement);
         }
         else {
           repeatStatus.textContent = 'Passwords must match be equal!';
@@ -516,6 +728,35 @@ export default class LogonContainer extends HTMLElement {
     }
   }
 
+  activateFinish(contentContainer) {
+    const outerThis = this;
+    const stagesContainer = contentContainer.querySelector('.stages');
+    const contentTitle = contentContainer.querySelector('.head > .logo h2 span.action');
+    const finish = this.getRegSuccess();
+    const form = contentContainer.querySelector('form');
+
+    setTimeout(() => {
+      form.remove();
+      outerThis.nextStep('register', stagesContainer);
+      stagesContainer.insertAdjacentHTML('afterend', finish)
+
+      outerThis.activateLogin(contentContainer, stagesContainer, contentTitle);
+    }, 1000);
+  }
+
+  activateLoginFinish(contentContainer, name) {
+    const outerThis = this;
+    const stagesContainer = contentContainer.querySelector('.stages');
+    // const contentTitle = contentContainer.querySelector('.head > .logo h2 span.action');
+    const finish = this.getLoginSuccess(name);
+    const form = contentContainer.querySelector('form');
+
+    setTimeout(() => {
+      form.remove();
+      outerThis.nextStep('login', stagesContainer);
+      stagesContainer.insertAdjacentHTML('afterend', finish)
+    }, 1000);
+  }
 
   disableScroll() {
     // Get the current page scroll position
@@ -627,6 +868,14 @@ export default class LogonContainer extends HTMLElement {
     `
   }
 
+  getBtnAltLoader() {
+    return `
+      <span id="btn-loader">
+				<span class="loader-alt"></span>
+			</span>
+    `
+  }
+
   getHeader() {
     return `
       <div class="head">
@@ -676,6 +925,31 @@ export default class LogonContainer extends HTMLElement {
     `
   }
 
+  getRegSuccess() {
+    return `
+      <div class="finish">
+        <h2 class="title">Welcome!</h2>
+				<p>
+					Your account has been created successfully. Please login into your account to start sharing great ideas.
+				</p>
+				<a href="/login/" class="login">Login</a>
+			</div>
+    `
+  }
+
+  getLoginSuccess(name) {
+    return `
+      <div class="finish login-success">
+        <span>Welcome</span>
+        <h2 class="title">${name}</h2>
+				<p>
+					You've successfully login into your account, click continue to proceed.
+				</p>
+				<a href="/login/" class="continue">Continue</a>
+			</div>
+    `
+  }
+
   getRegistrationForm() {
     return `
       <form class="fields initial">
@@ -695,6 +969,18 @@ export default class LogonContainer extends HTMLElement {
 					</button>
 				</div>
 			</form>
+    `
+  }
+
+  getUsernameFields() {
+    return `
+      <div class="field username">
+				<div class="input-group">
+				  <label for="username" class="center">Choose your username</label>
+					<input data-name="username" type="text" name="username" id="username" placeholder="Enter your desired username" required>
+					<span class="status">Username is taken!</span>
+				</div>
+			</div>
     `
   }
 
@@ -744,7 +1030,7 @@ export default class LogonContainer extends HTMLElement {
     return `
       <form class="fields initial bio">
 				<div class="field login bio">
-					<div class="input-group password">
+					<div class="input-group user-key">
 						<label for="user-key" class="center">Username or email</label>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 							<path
@@ -754,7 +1040,7 @@ export default class LogonContainer extends HTMLElement {
 							required>
 						<span class="status">Username or email is required</span>
 					</div>
-					<div class="input-group repeat-password">
+					<div class="input-group password">
 						<label for="password" class="center">Password</label>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 							<path
@@ -909,6 +1195,19 @@ export default class LogonContainer extends HTMLElement {
           -moz-border-radius: inherit;
           -ms-border-radius: inherit;
           -o-border-radius: inherit;
+        }
+
+        #btn-loader > .loader-alt {
+          width: 20px;
+          aspect-ratio: 1;
+          --_g: no-repeat radial-gradient(farthest-side, #18A565 94%, #0000);
+          --_g1: no-repeat radial-gradient(farthest-side, #21D029 94%, #0000);
+          --_g2: no-repeat radial-gradient(farthest-side, #df791a 94%, #0000);
+          --_g3: no-repeat radial-gradient(farthest-side, #f09c4e 94%, #0000);
+          background:    var(--_g) 0 0,    var(--_g1) 100% 0,    var(--_g2) 100% 100%,    var(--_g3) 0 100%;
+          background-size: 30% 30%;
+          animation: l38 .9s infinite ease-in-out;
+          -webkit-animation: l38 .9s infinite ease-in-out;
         }
 
         #btn-loader > .loader {
@@ -1240,6 +1539,23 @@ export default class LogonContainer extends HTMLElement {
           justify-content: center;
         }
 
+        .logon-container > .finish {
+          width: 90%;
+          display: flex;
+          flex-flow: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .logon-container > .finish > h2 {
+          margin: 10px 0;
+          text-align: center;
+          color: #404040;
+          line-height: 1.4;
+          font-size: 1.5rem;
+        }
+
+        .logon-container > .finish > p,
         .logon-container>.welcome > p {
           grid-column: 1/3;
           margin: 0%;
@@ -1249,6 +1565,7 @@ export default class LogonContainer extends HTMLElement {
           font-size: 1.1rem;
         }
 
+        .logon-container > .finish > a,
         .logon-container >.welcome > a {
           /*background: linear-gradient(103.53deg, #18A565 -6.72%, #21D029 109.77%);
           */
@@ -1265,11 +1582,7 @@ export default class LogonContainer extends HTMLElement {
           border: none;
           font-size: 1.15rem;
           font-weight: 500;
-          border-radius: 50px;
-          -webkit-border-radius: 50px;
-          -moz-border-radius: 50px;
-          -ms-border-radius: 50px;
-          -o-border-radius: 50px;
+          border-radius: 15px;
         }
 
         .logon-container > .welcome > a:last-of-type {
