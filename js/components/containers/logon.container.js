@@ -1096,7 +1096,7 @@ export default class LogonContainer extends HTMLElement {
   }
 
   getStyles() {
-    return `
+    return /*css*/`
       <style>
         * {
           box-sizing: border-box !important;
@@ -1184,17 +1184,10 @@ export default class LogonContainer extends HTMLElement {
           bottom: 0;
           right: 0;
           z-index: 5;
-          /*background-color: #ffffff38;
-          backdrop-filter: blur(1px);
-          -webkit-backdrop-filter: blur(1px);*/
           display: flex;
           align-items: center;
           justify-content: center;
           border-radius: inherit;
-          -webkit-border-radius: inherit;
-          -moz-border-radius: inherit;
-          -ms-border-radius: inherit;
-          -o-border-radius: inherit;
         }
 
         #btn-loader > .loader-alt {
