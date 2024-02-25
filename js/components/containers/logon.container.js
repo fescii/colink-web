@@ -4,7 +4,7 @@ export default class LogonContainer extends HTMLElement {
     // We are not even going to touch this.
     super();
 
-    // lets create our shadow root
+    // let's create our shadow root
     this.shadowObj = this.attachShadow({ mode: 'open' });
 
     this._step = 0;
@@ -160,7 +160,7 @@ export default class LogonContainer extends HTMLElement {
         stagesContainer.classList.remove('register', 'login');
         stagesContainer.classList.add('welcome-stages');
 
-        stages.forEach(stage => {
+        stages.forEach((stage, index) => {
           if (index === 2 || index === 3) {
             stage.style.display = 'none';
           }
@@ -482,7 +482,7 @@ export default class LogonContainer extends HTMLElement {
 
 
     // Validate names
-    if (this.validateName(firstName) && this.validateName(lastname)) {
+    if (this.validateName(firstName, submitButton) && this.validateName(lastname, submitButton)) {
       const input = email.querySelector('input').value.trim();
 
       email.classList.remove('success', 'failed');
@@ -503,7 +503,7 @@ export default class LogonContainer extends HTMLElement {
         }, 1000);
       }
       else {
-
+        // no Inspection
         let validRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
         if (input.match(validRegex)) {
@@ -525,7 +525,8 @@ export default class LogonContainer extends HTMLElement {
     }
   }
 
-  validateName(nameElement) {
+  validateName(nameElement, submitButton) {
+    const outerThis = this;
     const inputElement = nameElement.querySelector('input')
     const input = nameElement.querySelector('input').value.trim();
 
@@ -566,7 +567,7 @@ export default class LogonContainer extends HTMLElement {
   }
 
   checkEmail(form, input, email, emailStatus) {
-    const submitButton = form.querySelector('.actions > .action.next ');
+    const submitButton = form.querySelector('.actions > .action.next');
 
     // After API call
     let msg = 'Username is available' // From API
@@ -603,7 +604,7 @@ export default class LogonContainer extends HTMLElement {
 
   validatePassword(form) {
     const outerThis = this;
-    const submitButton = form.querySelector('.actions > .action.next ');
+    const submitButton = form.querySelector('.actions > .action.next');
     const inputField = form.querySelector('.field.password');
 
     // const inputGroups = inputField.querySelectorAll('.input-group');
@@ -930,7 +931,7 @@ export default class LogonContainer extends HTMLElement {
       <div class="finish">
         <h2 class="title">Welcome!</h2>
 				<p>
-					Your account has been created successfully. Please login into your account to start sharing great ideas.
+					Your account has been created successfully. Please log in into your account to start sharing great ideas.
 				</p>
 				<a href="/login/" class="login">Login</a>
 			</div>
@@ -1019,7 +1020,7 @@ export default class LogonContainer extends HTMLElement {
 				</div>
 				<div class="input-group repeat-password">
 					<label for="password2" class="center">Repeat password</label>
-					<input data-name="password2" type="password" name="password2" id="password2" placeholder="Repeate your password" required>
+					<input data-name="password2" type="password" name="password2" id="password2" placeholder="Repeat your password" required>
 					<span class="status">Password is required</span>
 				</div>
 			</div>
@@ -1104,7 +1105,6 @@ export default class LogonContainer extends HTMLElement {
         *,
         *:after,
         *:before {
-          -webkit-box-sizing: border-box;
           box-sizing: border-box;
           font-family: var(--font-main), sans-serif;
         }
@@ -1154,8 +1154,6 @@ export default class LogonContainer extends HTMLElement {
           border-radius: inherit;
           -webkit-border-radius: inherit;
           -moz-border-radius: inherit;
-          -ms-border-radius: inherit;
-          -o-border-radius: inherit;
         }
 
         #loader-container > .loader {
@@ -1221,7 +1219,6 @@ export default class LogonContainer extends HTMLElement {
           /* background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8); */
           position: fixed;
           left: 0;
-          height: 0;
           right: 0;
           bottom: 0;
           height: 100vh;
@@ -1239,7 +1236,6 @@ export default class LogonContainer extends HTMLElement {
         .circles li {
           position: absolute;
           z-index: 2;
-          display: block;
           list-style: none;
           width: 45px;
           height: 45px;
@@ -1369,7 +1365,7 @@ export default class LogonContainer extends HTMLElement {
           align-items: center;
           justify-content: center;
           gap: 10px;
-          box-shadow: 1px 1px 30px 0px rgba(0, 0, 0, 0.062);
+          box-shadow: 1px 1px 30px 0 rgba(0, 0, 0, 0.062);
           /* backdrop-filter: blur(10px); */
           /* -webkit-backdrop-filter: blur(10px); */
           border-radius: 10px;
@@ -1435,8 +1431,7 @@ export default class LogonContainer extends HTMLElement {
         }
 
         .logon-container>.stages span.done {
-          background-color: rgb(57, 56, 56);
-          background: linear-gradient(0deg, rgba(57, 56, 56, 0.1) 0%, rgba(57, 56, 56, 0.3) 100%);
+          background: rgb(57, 56, 56) linear-gradient(0deg, rgba(57, 56, 56, 0.1) 0%, rgba(57, 56, 56, 0.3) 100%);
           width: 30px;
           height: 30px;
           display: flex;
@@ -1446,8 +1441,6 @@ export default class LogonContainer extends HTMLElement {
           border-radius: 50px;
           -webkit-border-radius: 50px;
           -moz-border-radius: 50px;
-          -ms-border-radius: 50px;
-          -o-border-radius: 50px;
         }
 
         .logon-container>.stages span.done > span {
@@ -1459,8 +1452,6 @@ export default class LogonContainer extends HTMLElement {
           border-radius: 5px;
           -webkit-border-radius: 5px;
           -moz-border-radius: 5px;
-          -ms-border-radius: 5px;
-          -o-border-radius: 5px;
         }
 
         .logon-container>.stages span.done>span.left {
@@ -1487,16 +1478,13 @@ export default class LogonContainer extends HTMLElement {
           font-weight: 600;
           font-size: 1.2rem;
           padding: 2px;
-          background-color: rgb(57, 56, 56);
-          background: linear-gradient(0deg, rgba(57, 56, 56, 0.1) 0%, rgba(57, 56, 56, 0.3) 100%);
+          background: rgb(57, 56, 56) linear-gradient(0deg, rgba(57, 56, 56, 0.1) 0%, rgba(57, 56, 56, 0.3) 100%);
           color: #ffffff;
           width: 30px;
           height: 30px;
           border-radius: 50px;
           -webkit-border-radius: 50px;
           -moz-border-radius: 50px;
-          -ms-border-radius: 50px;
-          -o-border-radius: 50px;
         }
 
         .logon-container > .stages.login span.no.fourth,
@@ -1551,7 +1539,7 @@ export default class LogonContainer extends HTMLElement {
         .logon-container > .finish > p,
         .logon-container>.welcome > p {
           grid-column: 1/3;
-          margin: 0%;
+          margin: 0;
           text-align: center;
           color: #404040;
           line-height: 1.4;
@@ -1562,12 +1550,11 @@ export default class LogonContainer extends HTMLElement {
         .logon-container >.welcome > a {
           /*background: linear-gradient(103.53deg, #18A565 -6.72%, #21D029 109.77%);
           */
-          background: linear-gradient(0deg,      #18A565 0%,      #21D029 100%);
-          background-color: rgb(247, 145, 162);
+          background: rgb(247, 145, 162) linear-gradient(0deg,      #18A565 0%,      #21D029 100%);
           text-decoration: none;
           padding: 10px 20px;
           cursor: pointer;
-          margin: 20px 0%;
+          margin: 20px 0;
           width: 150px;
           justify-self: center;
           text-align: center;
@@ -1735,7 +1722,7 @@ export default class LogonContainer extends HTMLElement {
         .logon-container >.fields label {
           color: #666666;
           font-size: 1.1rem;
-          font-family: var(--font-main);
+          font-family: var(--font-main),sans-serif;
           transition: all 0.3s ease-in-out;
           pointer-events: none;
         }
@@ -1824,7 +1811,7 @@ export default class LogonContainer extends HTMLElement {
           gap: 5px;
           border: none;
           border-radius: 15px;
-          font-family: var(--font-main);
+          font-family: var(--font-main),sans-serif;
           line-height: 1.2;
           font-size: 1.2rem;
           font-weight: 500;
@@ -1836,13 +1823,10 @@ export default class LogonContainer extends HTMLElement {
           position: relative;
           -webkit-border-radius: 15px;
           -moz-border-radius: 15px;
-          -ms-border-radius: 15px;
-          -o-border-radius: 15px;
         }
 
         .logon-container > .fields .actions > .action.prev {
-          background-color: rgb(57, 56, 56);
-          background: linear-gradient(0deg, rgba(57, 56, 56, 0.087) 0%, rgba(57, 56, 56, 0.187) 100%);
+          background: rgb(57, 56, 56) linear-gradient(0deg, rgba(57, 56, 56, 0.087) 0%, rgba(57, 56, 56, 0.187) 100%);
         }
 
         .logon-container > .fields .actions > .action.prev svg path {
@@ -1899,8 +1883,6 @@ export default class LogonContainer extends HTMLElement {
           border-radius: 50px;
           -webkit-border-radius: 50px;
           -moz-border-radius: 50px;
-          -ms-border-radius: 50px;
-          -o-border-radius: 50px;
         }
 
         .logon-container > .footer > li a {
@@ -1926,11 +1908,11 @@ export default class LogonContainer extends HTMLElement {
           align-items: center;
           justify-content: center;
           gap: 0;
-          font-family: var(--font-mono);
+          font-family: var(--font-mono),monospace;
         }
 
         .logon-container > .footer > li a.copyright .year {
-          font-family: var(--font-main);
+          font-family: var(--font-main),sans-serif;
           font-size: 0.9em;
           padding: 0 5px 0 2px;
           font-weight: 500;
